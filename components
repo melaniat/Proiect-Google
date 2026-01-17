@@ -1,0 +1,70 @@
+
+import React from 'react';
+import { Screen } from '../types';
+import { Home, Compass, BarChart3, Settings } from 'lucide-react';
+
+interface LayoutProps {
+  children: React.ReactNode;
+  activeScreen: Screen;
+  setActiveScreen: (screen: Screen) => void;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children, activeScreen, setActiveScreen }) => {
+  return (
+    <div className="flex flex-col h-screen max-w-md mx-auto bg-[#0A1218] shadow-2xl overflow-hidden relative border-x border-slate-800">
+      {/* Scrollable Area */}
+      <main className="flex-1 overflow-y-auto pb-24 scroll-smooth">
+        {children}
+      </main>
+
+      {/* Navigation Bar */}
+      <nav className="absolute bottom-6 left-4 right-4 h-16 glass rounded-2xl flex items-center justify-around px-4 z-50">
+        <NavButton 
+          active={activeScreen === Screen.DASHBOARD} 
+          onClick={() => setActiveScreen(Screen.DASHBOARD)}
+          icon={<Home size={22} />}
+          label="Home"
+        />
+        <NavButton 
+          active={activeScreen === Screen.LIBRARY} 
+          onClick={() => setActiveScreen(Screen.LIBRARY)}
+          icon={<Compass size={22} />}
+          label="Sessions"
+        />
+        <NavButton 
+          active={activeScreen === Screen.ANALYTICS} 
+          onClick={() => setActiveScreen(Screen.ANALYTICS)}
+          icon={<BarChart3 size={22} />}
+          label="Stats"
+        />
+        <NavButton 
+          active={activeScreen === Screen.SETTINGS} 
+          onClick={() => setActiveScreen(Screen.SETTINGS)}
+          icon={<Settings size={22} />}
+          label="Settings"
+        />
+      </nav>
+    </div>
+  );
+};
+
+interface NavButtonProps {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}
+
+const NavButton: React.FC<NavButtonProps> = ({ active, onClick, icon }) => (
+  <button 
+    onClick={onClick}
+    className={`flex flex-col items-center justify-center p-2 transition-all duration-300 ${
+      active ? 'text-[#00C2FF] scale-110' : 'text-slate-500 hover:text-slate-300'
+    }`}
+  >
+    {icon}
+    {active && <div className="w-1 h-1 bg-[#00C2FF] rounded-full mt-1 accent-glow" />}
+  </button>
+);
+
+export default Layout;
